@@ -1,271 +1,72 @@
-import React, { useMemo, useState } from 'react';
-import { Check, Shield, Sparkles, Zap } from 'lucide-react';
+import React from 'react';
+import { Check } from 'lucide-react';
+import { pricingTiers } from '../data/pricing';
+import GradientText from './GradientText';
+import Button from './Button';
+import Reveal from './ui/Reveal';
 
-type PricingTier = {
-  name: string;
-  description: string;
-  priceMonthly: number;
-  badge?: string;
-  highlighted?: boolean;
-  icon: 'zap' | 'sparkles' | 'shield';
-  features: string[];
-  cta: {
-    label: string;
-    href: string;
-  };
-};
-
-function cn(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ');
-}
-
-function formatUSD(amount: number) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
-    maximumFractionDigits: 0,
-  }).format(amount);
-}
-
-function IconForTier({ icon }: { icon: PricingTier['icon'] }) {
-  const common = 'h-5 w-5';
-  if (icon === 'zap') return <Zap className={common} aria-hidden="true" />;
-  if (icon === 'sparkles') return <Sparkles className={common} aria-hidden="true" />;
-  return <Shield className={common} aria-hidden="true" />;
-}
-
-function Price({ value }: { value: number }) {
-  const formatted = useMemo(() => formatUSD(value), [value]);
+const PricingSection: React.FC = () => {
   return (
-    <div className="flex items-end gap-2">
-      <span className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl">
-        {formatted}
-      </span>
-      <span className="pb-1 text-sm text-muted-foreground">/ month</span>
-    </div>
-  );
-}
-
-export default function PricingSection(props: { children?: React.ReactNode } = {}) {
-  const [seatCount, setSeatCount] = useState<number>(10);
-
-  const tiers: PricingTier[] = useMemo(
-    () => [
-      {
-        name: 'Starter',
-        description: 'For small clinics getting to a clean, compliant workflow.',
-        priceMonthly: 39,
-        icon: 'zap',
-        features: [
-          'Smart intake + e-signature forms',
-          'Appointment reminders (email/SMS)',
-          'Basic analytics dashboard',
-          'HIPAA-aligned access controls',
-        ],
-        cta: { label: 'Start Starter', href: '#contact' },
-      },
-      {
-        name: 'Pro',
-        description: 'Best for growing practices that need automation and visibility.',
-        priceMonthly: 89,
-        badge: 'Most popular',
-        highlighted: true,
-        icon: 'sparkles',
-        features: [
-          'Everything in Starter',
-          'Automated charting helpers',
-          'Referral + follow-up workflows',
-          'Custom patient segments',
-          'Priority support (same-day)',
-        ],
-        cta: { label: 'Choose Pro', href: '#contact' },
-      },
-      {
-        name: 'Enterprise',
-        description: 'For multi-site organizations with advanced security and controls.',
-        priceMonthly: 169,
-        icon: 'shield',
-        features: [
-          'Everything in Pro',
-          'SSO + SCIM provisioning',
-          'Audit logs + retention policies',
-          'Dedicated success manager',
-          'Custom BAA + procurement support',
-        ],
-        cta: { label: 'Talk to sales', href: '#contact' },
-      },
-    ],
-    [],
-  );
-
-  const estimatedSavings = useMemo(() => {
-    // Lightweight, purely illustrative estimator.
-    // Assumption: each seat saves ~25 minutes/week of admin work.
-    const minutesPerWeek = seatCount * 25;
-    const hoursPerMonth = (minutesPerWeek * 4.33) / 60;
-    return Math.max(0, Math.round(hoursPerMonth));
-  }, [seatCount]);
-
-  return (
-    <section id="pricing" aria-labelledby="pricing-title" className="relative">
-      {/* Background accents */}
-      <div aria-hidden="true" className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute left-1/2 top-0 h-[520px] w-[820px] -translate-x-1/2 rounded-full bg-gradient-to-r from-primary/20 via-secondary/20 to-primary/10 blur-3xl" />
-        <div className="absolute -bottom-24 left-[-120px] h-[420px] w-[420px] rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute -top-24 right-[-120px] h-[420px] w-[420px] rounded-full bg-secondary/10 blur-3xl" />
-      </div>
-
-      <div className="relative mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="mx-auto max-w-3xl text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-card/50 px-3 py-1 text-xs text-muted-foreground backdrop-blur">
-            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
-            Transparent monthly pricing
+    <section id="pricing" className="relative py-20">
+      <div className="max-w-7xl mx-auto px-6">
+        <Reveal>
+          <div className="text-center mb-14 max-w-2xl mx-auto">
+            <h2 className="text-3xl sm:text-4xl font-bold text-[hsl(var(--foreground))] mb-3">
+              <GradientText>Simple, transparent pricing</GradientText>
+            </h2>
+            <p className="text-lg text-[hsl(var(--muted-foreground))]">
+              One plan for every practice size. No hidden fees, no per-seat surprises.
+            </p>
           </div>
-          <h2
-            id="pricing-title"
-            className="mt-4 text-balance text-3xl font-bold tracking-tight text-foreground sm:text-4xl"
-          >
-            Plans that scale with your practice
-          </h2>
-          <p className="mt-3 text-pretty text-sm leading-6 text-muted-foreground sm:text-base">
-            Choose a tier that fits today — upgrade anytime. All plans include secure hosting, fast
-            onboarding, and modern tooling designed for healthcare workflows.
-          </p>
-        </div>
-
-        {/* Pricing grid */}
-        <div className="mt-10 grid gap-6 lg:grid-cols-3">
-          {tiers.map((tier) => {
-            const highlighted = !!tier.highlighted;
-            return (
+        </Reveal>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {pricingTiers.map((tier, i) => (
+            <Reveal key={tier.name} delay={i * 0.08}>
               <div
-                key={tier.name}
-                className={cn(
-                  'group relative rounded-2xl border bg-card/60 p-6 shadow-sm backdrop-blur transition',
-                  'hover:-translate-y-0.5 hover:border-border/80 hover:bg-card/75 hover:shadow-lg',
-                  highlighted
-                    ? 'border-border/90 ring-1 ring-primary/30'
-                    : 'border-border/70',
-                )}
+                className={`relative flex flex-col justify-between h-full bg-[hsl(var(--card))] border rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 ${
+                  tier.featured
+                    ? 'border-cyan-500/50 shadow-lg shadow-cyan-500/10'
+                    : 'border-[hsl(var(--border))] hover:border-[hsl(var(--border))]/80'
+                }`}
               >
-                {/* Top glow for highlighted */}
-                {highlighted ? (
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-b from-primary/10 via-transparent to-transparent"
-                  />
-                ) : null}
-
-                <div className="relative flex items-start justify-between gap-4">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span
-                        className={cn(
-                          'inline-flex h-9 w-9 items-center justify-center rounded-xl border',
-                          highlighted
-                            ? 'border-primary/30 bg-gradient-to-br from-primary/20 to-secondary/20 text-foreground'
-                            : 'border-border/80 bg-muted/30 text-foreground',
-                        )}
-                      >
-                        <IconForTier icon={tier.icon} />
-                      </span>
-                      <h3 className="text-lg font-semibold text-foreground">{tier.name}</h3>
-                    </div>
-                    <p className="mt-2 text-sm leading-6 text-muted-foreground">{tier.description}</p>
+                {tier.featured && (
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-cyan-500 to-purple-500 px-3 py-1 text-xs font-semibold text-white">
+                    Most popular
                   </div>
-
-                  {tier.badge ? (
-                    <div className="shrink-0">
-                      <span className="inline-flex items-center rounded-full border border-primary/30 bg-primary/10 px-2.5 py-1 text-xs font-medium text-foreground">
-                        {tier.badge}
-                      </span>
-                    </div>
-                  ) : null}
+                )}
+                <div>
+                  <h3 className="text-lg font-semibold text-[hsl(var(--foreground))] mb-2">
+                    {tier.name}
+                  </h3>
+                  <div className="flex items-end mb-6">
+                    <span className="text-5xl font-bold text-[hsl(var(--foreground))]">
+                      ${tier.price}
+                    </span>
+                    <span className="ml-2 mb-1 text-sm text-[hsl(var(--muted-foreground))]">/month</span>
+                  </div>
+                  <ul className="mb-8 space-y-3">
+                    {tier.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2 text-sm text-[hsl(var(--foreground))]/90">
+                        <Check className="w-4 h-4 text-cyan-400 mt-0.5 shrink-0" />
+                        <span>{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-
-                <div className="relative mt-6">
-                  <Price value={tier.priceMonthly} />
-                  <p className="mt-2 text-xs text-muted-foreground">
-                    Billed monthly. Cancel anytime.
-                  </p>
-                </div>
-
-                <ul className="relative mt-6 space-y-3 text-sm">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-start gap-3 text-muted-foreground">
-                      <span
-                        className={cn(
-                          'mt-0.5 inline-flex h-5 w-5 items-center justify-center rounded-full border',
-                          highlighted
-                            ? 'border-primary/30 bg-primary/10 text-primary'
-                            : 'border-border/80 bg-muted/30 text-foreground',
-                        )}
-                        aria-hidden="true"
-                      >
-                        <Check className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="leading-6">{f}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <div className="relative mt-8">
-                  <a
-                    href={tier.cta.href}
-                    className={cn(
-                      'inline-flex w-full items-center justify-center rounded-xl px-4 py-2.5 text-sm font-semibold transition',
-                      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                      highlighted
-                        ? 'bg-gradient-to-r from-primary to-secondary text-primary-foreground hover:opacity-95'
-                        : 'border border-border/80 bg-muted/30 text-foreground hover:border-border hover:bg-muted/40',
-                    )}
-                  >
-                    {tier.cta.label}
-                  </a>
-                  <p className="mt-3 text-center text-xs text-muted-foreground">
-                    No credit card required for Starter.
-                  </p>
-                </div>
+                <Button
+                  variant={tier.featured ? 'gradient' : 'outline'}
+                  size="lg"
+                  className="w-full mt-auto"
+                >
+                  {tier.cta}
+                </Button>
               </div>
-            );
-          })}
+            </Reveal>
+          ))}
         </div>
-
-        {/* Bottom utility band */}
-        <div className="mt-10 rounded-2xl border border-border/70 bg-card/50 p-6 backdrop-blur">
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <h3 className="text-sm font-semibold text-foreground">
-                Estimate time saved with Medora automation
-              </h3>
-              <p className="mt-1 text-sm text-muted-foreground">
-                A quick, mock estimate based on your team size (no tracking, no backend).
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <label className="flex items-center gap-3 text-sm text-muted-foreground">
-                <span className="min-w-[84px]">Team seats</span>
-                <input
-                  value={seatCount}
-                  onChange={(e) => setSeatCount(Math.min(250, Math.max(1, Number(e.target.value) || 1)))}
-                  inputMode="numeric"
-                  className="h-10 w-28 rounded-xl border border-border/80 bg-background/40 px-3 text-sm text-foreground outline-none transition focus:border-border focus:ring-2 focus:ring-ring"
-                  aria-label="Team seats"
-                />
-              </label>
-              <div className="rounded-xl border border-border/80 bg-muted/30 px-4 py-2.5 text-sm">
-                <span className="text-muted-foreground">Est. saved:</span>{' '}
-                <span className="font-semibold text-foreground">{estimatedSavings} hrs/month</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {props.children}
       </div>
     </section>
   );
-}
+};
 
-export { PricingSection };
+export default PricingSection;

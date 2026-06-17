@@ -1,31 +1,30 @@
-export interface Testimonial {
-  id: string;
+export type Testimonial = {
   name: string;
   role: string;
-  avatar: string;
   quote: string;
-}
+  avatar: string;
+};
 
 export const testimonials: Testimonial[] = [
   {
-    id: '1',
-    name: 'Dr. Sarah Mitchell',
-    role: 'Family Physician, Oakwood Clinic',
-    avatar: 'https://i.pravatar.cc/150?img=12',
-    quote: 'Medora has transformed how we manage our clinic. The automation features save us hours every week.',
+    name: 'Dr. Emily Carter',
+    role: 'Family Physician · Carter Family Health',
+    quote:
+      'Medora cut our charting time by 40% in the first month. My staff finally stopped complaining about the EHR — that alone was worth the switch.',
+    avatar: 'https://i.pravatar.cc/120?img=47',
   },
   {
-    id: '2',
-    name: 'Dr. Ravi Patel',
-    role: 'Pediatrician, Sunrise Pediatrics',
-    avatar: 'https://i.pravatar.cc/150?img=23',
-    quote: 'The onboarding was seamless, and the support team is outstanding. Highly recommended for any practice.',
+    name: 'Dr. Raj Patel',
+    role: 'Pediatrician · Bright Kids Clinic',
+    quote:
+      'Scheduling, charting, and billing in one place. I see 6 more patients a day without feeling rushed. It just works.',
+    avatar: 'https://i.pravatar.cc/120?img=12',
   },
   {
-    id: '3',
-    name: 'Dr. Emily Chen',
-    role: 'Dermatologist, City Skin Center',
-    avatar: 'https://i.pravatar.cc/150?img=34',
-    quote: 'Our patients love the appointment reminders, and we love the peace of mind from Medora’s security.',
+    name: 'Dr. Lisa Nguyen',
+    role: 'Owner · Nguyen Internal Medicine',
+    quote:
+      'Onboarding took two days, not two months. The analytics dashboard alone helped us recover $48K in missed billing last quarter.',
+    avatar: 'https://i.pravatar.cc/120?img=32',
   },
 ];

@@ -1,26 +1,17 @@
-import React from 'react';
-import { motion } from 'framer-motion';
 import HeroSection from '../components/HeroSection';
-import FeatureGrid from '../components/FeatureGrid';
-import HowItWorks from '../components/HowItWorks';
+import FeatureSection from '../components/FeatureSection';
+import HowItWorksSection from '../components/HowItWorksSection';
 import PricingSection from '../components/PricingSection';
-import TestimonialRow from '../components/TestimonialRow';
+import TestimonialSection from '../components/TestimonialSection';
 
-const Home: React.FC = () => {
+export default function Home() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -12 }}
-      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-    >
+    <div className="flex flex-col">
       <HeroSection />
-      <FeatureGrid />
-      <HowItWorks />
+      <FeatureSection />
+      <HowItWorksSection />
       <PricingSection />
-      <TestimonialRow />
-    </motion.div>
+      <TestimonialSection />
+    </div>
   );
-};
-
-export default Home;
+}

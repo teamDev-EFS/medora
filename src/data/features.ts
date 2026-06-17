@@ -1,27 +1,43 @@
-export interface Feature {
-  id: string;
-  icon: string;
+import { Lucide, Stethoscope, CalendarClock, ShieldCheck, BarChart3, Users, Cloud } from 'lucide-react';
+
+export type Feature = {
+  icon: Lucide;
   title: string;
   description: string;
-}
+};
 
-export const features: Feature[] = [
+const features: Feature[] = [
   {
-    id: '1',
-    icon: 'Stethoscope',
-    title: 'Patient Management',
-    description: 'Centralize patient records, appointments, and notes in a secure, intuitive dashboard.',
+    icon: Stethoscope,
+    title: 'Clinical efficiency',
+    description: 'Streamline patient workflows and reduce admin time with intuitive, fast charting and scheduling.',
   },
   {
-    id: '2',
-    icon: 'CalendarCheck2',
-    title: 'Automated Scheduling',
-    description: 'Reduce no-shows with smart reminders and seamless calendar integration for your team.',
+    icon: CalendarClock,
+    title: 'Smart scheduling',
+    description: 'Automated reminders, online bookings, and calendar sync keep your practice running smoothly.',
   },
   {
-    id: '3',
-    icon: 'ShieldCheck',
-    title: 'HIPAA-Grade Security',
-    description: 'All data is encrypted at rest and in transit, meeting the highest compliance standards.',
+    icon: ShieldCheck,
+    title: 'HIPAA-grade security',
+    description: 'End-to-end encryption and robust access controls keep patient data safe and compliant.',
+  },
+  {
+    icon: BarChart3,
+    title: 'Practice analytics',
+    description: 'Real-time dashboards on revenue, no-shows, and patient outcomes — no spreadsheet exports needed.',
+  },
+  {
+    icon: Users,
+    title: 'Team collaboration',
+    description: 'Role-based access, shared notes, and internal messaging built for clinical teams.',
+  },
+  {
+    icon: Cloud,
+    title: 'Cloud-native',
+    description: 'Access charts from any device. Automatic backups, 99.99% uptime, zero on-prem hardware.',
   },
 ];
+
+export { features };
+export default features;

@@ -1,48 +1,44 @@
-export interface PricingTier {
-  id: string;
+export type PricingTier = {
   name: string;
   price: string;
-  description: string;
   features: string[];
-  bestValue?: boolean;
-}
+  cta: string;
+  featured?: boolean;
+};
 
 export const pricingTiers: PricingTier[] = [
   {
-    id: 'starter',
     name: 'Starter',
-    price: '$49/mo',
-    description: 'For solo practitioners and small clinics getting started.',
+    price: '29',
     features: [
-      'Up to 2 providers',
-      'Patient management',
+      'Unlimited patients',
       'Basic scheduling',
+      'Secure messaging',
       'Email support',
     ],
+    cta: 'Start Free',
   },
   {
-    id: 'growth',
-    name: 'Growth',
-    price: '$129/mo',
-    description: 'For growing practices needing advanced automation.',
+    name: 'Professional',
+    price: '69',
     features: [
-      'Up to 10 providers',
-      'Automated reminders',
-      'Analytics dashboard',
+      'Everything in Starter',
+      'Advanced analytics',
+      'Team collaboration',
       'Priority support',
     ],
-    bestValue: true,
+    cta: 'Get Started',
+    featured: true,
   },
   {
-    id: 'enterprise',
     name: 'Enterprise',
-    price: 'Custom',
-    description: 'For large clinics and healthcare networks.',
+    price: '149',
     features: [
-      'Unlimited providers',
+      'Everything in Professional',
       'Custom integrations',
-      'Dedicated account manager',
+      'Dedicated onboarding',
       '24/7 support',
     ],
+    cta: 'Contact Sales',
   },
 ];

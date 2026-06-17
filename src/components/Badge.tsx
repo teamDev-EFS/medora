@@ -1,24 +1,33 @@
-import React from 'react';
-import clsx from 'clsx';
+import * as React from 'react';
 
-interface BadgeProps {
+export type BadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info' | 'neutral';
+
+export interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
+  variant?: BadgeVariant;
   children: React.ReactNode;
-  color?: 'success' | 'warning' | 'danger' | 'info' | 'neutral';
-  className?: string;
 }
 
-const colorMap = {
-  success: 'bg-emerald-100 text-emerald-700',
-  warning: 'bg-amber-100 text-amber-700',
-  danger: 'bg-red-100 text-red-700',
-  info: 'bg-blue-100 text-blue-700',
-  neutral: 'bg-slate-100 text-slate-600',
+const variantClasses: Record<BadgeVariant, string> = {
+  default: 'bg-[#06B6D4]/10 text-[#06B6D4] border-[#06B6D4]/20',
+  success: 'bg-[#10B981]/10 text-[#10B981] border-[#10B981]/20',
+  warning: 'bg-[#F59E0B]/10 text-[#F59E0B] border-[#F59E0B]/20',
+  danger: 'bg-[#EF4444]/10 text-[#EF4444] border-[#EF4444]/20',
+  info: 'bg-[#6366F1]/10 text-[#6366F1] border-[#6366F1]/20',
+  neutral: 'bg-[#1F2937] text-[#9CA3AF] border-[#374151]',
 };
 
-const Badge: React.FC<BadgeProps> = ({ children, color = 'neutral', className }) => (
-  <span className={clsx('rounded-full px-2.5 py-0.5 text-xs font-medium', colorMap[color], className)}>
-    {children}
-  </span>
-);
-
-export default Badge;
+export const Badge: React.FC<BadgeProps> = ({ variant = 'default', children, className = '', ...props }) => {
+  return (
+    <span
+      className={[
+        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-medium',
+        'transition-colors duration-200',
+        variantClasses[variant],
+        className,
+      ].join(' ')}
+      {...props}
+    >
+      {children}
+    </span>
+  );
+};

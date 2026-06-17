@@ -1,30 +1,69 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import clsx from 'clsx';
+import * as React from 'react';
+import { Loader2 } from 'lucide-react';
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary';
-  children: React.ReactNode;
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  size?: 'sm' | 'md' | 'lg';
+  isLoading?: boolean;
+  leftIcon?: React.ReactNode;
+  rightIcon?: React.ReactNode;
 }
 
-const Button: React.FC<ButtonProps> = ({ variant = 'primary', children, className, ...props }) => {
-  return (
-    <motion.button
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.97 }}
-      transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-      className={clsx(
-        'px-5 py-2 rounded-lg font-semibold transition-all duration-200 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
-        variant === 'primary'
-          ? 'bg-primary text-white shadow hover:bg-secondary'
-          : 'bg-surface-2 text-primary border border-primary hover:bg-primary/10',
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </motion.button>
-  );
+const variantClasses: Record<NonNullable<ButtonProps['variant']>, string> = {
+  primary:
+    'bg-[#06B6D4] text-white hover:bg-[#6366F1] focus-visible:ring-[#06B6D4]/50 shadow-sm',
+  secondary:
+    'bg-[#1F2937] text-[#F9FAFB] border border-[#374151] hover:bg-[#374151] focus-visible:ring-[#374151]/50',
+  ghost:
+    'bg-transparent text-[#9CA3AF] hover:text-[#F9FAFB] hover:bg-[#1F2937]/50 focus-visible:ring-[#1F2937]/50',
+  danger:
+    'bg-[#EF4444] text-white hover:bg-red-600 focus-visible:ring-[#EF4444]/50 shadow-sm',
 };
 
-export default Button;
+const sizeClasses: Record<NonNullable<ButtonProps['size']>, string> = {
+  sm: 'h-8 px-3 text-xs',
+  md: 'h-9 px-4 text-sm',
+  lg: 'h-11 px-6 text-sm',
+};
+
+export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      variant = 'primary',
+      size = 'md',
+      isLoading = false,
+      leftIcon,
+      rightIcon,
+      children,
+      className = '',
+      disabled,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <button
+        ref={ref}
+        disabled={disabled || isLoading}
+        className={[
+          'inline-flex items-center justify-center gap-2 rounded-md font-medium',
+          'transition-[background-color,color,border-color,transform,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)]',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0A0F1E]',
+          'disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0',
+          'hover:-translate-y-0.5 active:translate-y-0 active:scale-[0.98]',
+          variantClasses[variant],
+          sizeClasses[size],
+          className,
+        ].join(' ')}
+        {...props}
+      >
+        {isLoading && <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />}
+        {!isLoading && leftIcon}
+        {children}
+        {!isLoading && rightIcon}
+      </button>
+    );
+  }
+);
+
+Button.displayName = 'Button';
